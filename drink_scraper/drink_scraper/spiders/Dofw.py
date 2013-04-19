@@ -3,7 +3,7 @@ from scrapy.selector import HtmlXPathSelector
 from drink_scraper.items import Drink
 from scrapy import log
 from scrapy.http import Request
-from drink_lib.Unit_Analyzer import Unit_Analyzer
+from drink_scraper.unit_analyzer import Unit_Analyzer
 
 
 class Dofw(BaseSpider):
