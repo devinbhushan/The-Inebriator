@@ -40,7 +40,7 @@ class GC(BaseSpider):
         drink['rating'] = None
         drink['num_reviews'] = None
         drink['tags'] = None
-        drink['directions'] = hxs.select("//div[@id='drinkRecipe']/p[last()]")
+        drink['directions'] = hxs.select("//div[@id='drinkRecipe']/p[position()=2]").extract()
 
         log.msg('Drink retrieved: %s' % drink, level=log.INFO)
         return drink
