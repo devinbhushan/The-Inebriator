@@ -3,10 +3,10 @@ from scrapy.selector import HtmlXPathSelector
 from drink_scraper.items import Drink
 from scrapy import log
 from scrapy.http import Request
-
-
+ 
+ 
 class Dofw(BaseSpider):
-    """
+    """ 
     Spider for Good Cocktails
     """
     name = "gc"
@@ -36,14 +36,15 @@ class Dofw(BaseSpider):
         hxs = HtmlXPathSelector(response)
         drink = Drink()
 
-        drink['name'] = hxs.select("//h2[@class='pagetitle']/text()")
-        drink['rating'] = hxs.select("//meta[@itemprop='ratingValue']/@content")
-        drink['num_reviews'] = hxs.select("//meta[@itemprop='ratingCount']/@content")
-
-        drink['tags'] = []
+        drink['name'] = hxs.select("//div[@id='drinkRecipe']/h2/text()")
+        drink['rating'] = None
+        drink['num_reviews'] = None
+        drink['tags'] = None
+        '''drink['tags'] = []
+        tags = None
         tags = hxs.select("//div[@class='posttags']/a[@rel='tag']")
         for tag in tags:
-            drink['tags'].append(tag.select("text()"))
+            drink['tags'].append(tag.select("text()"))'''
 
         log.msg('Drink retrieved: %s' % drink, level=log.INFO)
         return drink
