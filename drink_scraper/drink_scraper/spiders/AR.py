@@ -6,7 +6,7 @@ from scrapy.http import Request
 
 '''proving devin wrong'''
 
-class Dofw(BaseSpider):
+class AR(BaseSpider):
     """
     Spider for http://allrecipes.com/recipes/drinks/ViewAll.aspx
     """
