@@ -4,11 +4,11 @@ from drink_scraper.items import Drink
 from scrapy import log
 from scrapy.http import Request
 
-
+      
 class Dofw(BaseSpider):
-    """
+    """ 
     Spider for http://www.drinkoftheweek.com/list-drinks-a-z/
-    """
+    """ 
     name = "dofw"
     allowed_domains = ["drinkoftheweek.com"]
     start_urls = ["http://www.drinkoftheweek.com/list-drinks-a-z/"]
