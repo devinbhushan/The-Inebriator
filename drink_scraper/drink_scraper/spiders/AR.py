@@ -10,9 +10,9 @@ class AR(BaseSpider):
     """
     Spider for http://allrecipes.com/recipes/drinks/ViewAll.aspx
     """
-    name = "dofw"
+    name = "AR"
     allowed_domains = ["allrecipes.com"]
-    start_urls = ["http://www.drinkoftheweek.com/list-drinks-a-z/"]
+    start_urls = ["http://allrecipes.com/recipes/drinks/ViewAll.aspx"]
 
     def parse(self, response):
         """
