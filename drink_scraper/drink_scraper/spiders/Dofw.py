@@ -3,6 +3,7 @@ from scrapy.selector import HtmlXPathSelector
 from drink_scraper.items import Drink
 from scrapy import log
 from scrapy.http import Request
+from drink_lib.Unit_Analyzer import Unit_Analyzer
 
 '''proving devin wrong'''
 
@@ -17,7 +18,6 @@ class Dofw(BaseSpider):
     def parse(self, response):
         """
         Parse function to get each drink's link and parse it
-        @Retur
         """
         log.msg("Beginning parse function", level=log.INFO)
         hxs = HtmlXPathSelector(response)
