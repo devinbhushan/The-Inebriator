@@ -21,7 +21,7 @@ class AR(BaseSpider):
         """
         log.msg("Beginning parse function", level=log.INFO)
         hxs = HtmlXPathSelector(response)
-        outer_links = hxs.select("//div[@class='yay']/div[@class='recipes recipies_compact']")
+        outer_links = hxs.select("//div[@class='recipes recipes_compact']")
         log.msg('number outer_links: %s' % len(outer_links), level=log.INFO)
         #table//h3/a/@href
         for outer_link in outer_links:
@@ -39,14 +39,15 @@ class AR(BaseSpider):
         hxs = HtmlXPathSelector(response)
         drink = Drink()
 
-        drink['name'] = hxs.select("//h1[@class='plaincharcterwrap']/text()")
+        drink['name'] = hxs.select("//h1[@id='itemTitle']/text()")
         drink['rating'] = hxs.select("//meta[@itemprop='ratingValue']/@content")
-        drink['num_reviews'] = hxs.select("//meta[@itemprop='metaReviewCount']/@content")
+        drink['num_reviews'] = hxs.select("//meta[@id='metaReviewCount']/@content")
         drink['directions'] = []
         directionlist = hxs.select("//div[@class='directLeft']/ol/li")
         
         for list in directionlist:
-                drink['directions'].append(list.select("span/text()"))
+                log.msg("Direction adding %s" % list.select("span/text()").extract(), level=log.INFO)
+                drink['directions'].append(list.select("span/text()").extract())
         
         
 
