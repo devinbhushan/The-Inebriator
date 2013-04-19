@@ -37,14 +37,21 @@ class Dofw(BaseSpider):
         hxs = HtmlXPathSelector(response)
         drink = Drink()
 
-        drink['name'] = hxs.select("//h2[@class='pagetitle']/text()")
-        drink['rating'] = hxs.select("//meta[@itemprop='ratingValue']/@content")
-        drink['num_reviews'] = hxs.select("//meta[@itemprop='ratingCount']/@content")
+        drink['name'] = hxs.select("//h2[@class='pagetitle']/text()").extract()[0]
+        drink['rating'] = hxs.select("//meta[@itemprop='ratingValue']/@content").extract()[0]
+        drink['num_reviews'] = hxs.select("//meta[@itemprop='ratingCount']/@content").extract()[0]
 
         drink['tags'] = []
         tags = hxs.select("//div[@class='posttags']/a[@rel='tag']")
         for tag in tags:
-            drink['tags'].append(tag.select("text()"))
+            drink['tags'].append(tag.select("text()").extract()[0])
+
+        drink['ingredients'] = []
+        unit_analyzer = Unit_Analyzer()
+        ingredient_strings = hxs.select("//ul[@class='ingredients']/li")
+        for ingredient_string in ingredient_strings:
+            final_triple = unit_analyzer.get_triple(ingredient_string.select('text()').extract()[0])
+            drink['ingredients'].append(final_triple)
 
         log.msg('Drink retrieved: %s' % drink, level=log.INFO)
         return drink

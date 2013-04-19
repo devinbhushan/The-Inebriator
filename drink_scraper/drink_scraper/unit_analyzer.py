@@ -13,6 +13,7 @@ class Unit_Analyzer():
         """
         #find units
         words = input_text.split()
+        unit_selected = None
         for curr_unit in self.unit_filters:
             extensions = ["", ".", "s", "es"]
             for extension in extensions:
@@ -23,7 +24,7 @@ class Unit_Analyzer():
 
         # In case no units exist
         if unit_selected is None:
-            unit_selected = ""
+            return (None, input_text, None)
 
         quantity, ingredient = input_text.split(unit_selected)
         #print "quantity:%s, ingredient:%s, unit:%s" % (quantity.strip(), ingredient.strip(), unit_selected.strip())
@@ -40,4 +41,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
