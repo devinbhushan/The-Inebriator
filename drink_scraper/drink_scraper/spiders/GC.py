@@ -26,7 +26,7 @@ class GC(BaseSpider):
             links = outer_links.select('a/@href').extract()
             for link in links:
                 #log.msg('following %s' % link, level=log.INFO)
-                yield Request(start_urls[0]+link, callback=self.parseDrink)
+                yield Request("http://www.goodcocktails.com/recipes/" + link, callback=self.parseDrink)
 
     def parseDrink(self, response):
         """
