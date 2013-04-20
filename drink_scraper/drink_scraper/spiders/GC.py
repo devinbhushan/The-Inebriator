@@ -48,5 +48,6 @@ class GC(BaseSpider):
             final_triple = unit_analyzer.get_triple(ingredient_string.select('text()').extract()[0])
             drink['ingredients'].append(final_triple)
 
+
         log.msg('Drink retrieved: %s' % drink, level=log.INFO)
         return drink
