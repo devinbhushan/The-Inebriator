@@ -1,4 +1,4 @@
 bin
-.project
-.pydevproject
-.pyc
+*.project
+*.pydevproject
+*.pyc
