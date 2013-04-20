@@ -36,11 +36,17 @@ class GC(BaseSpider):
         hxs = HtmlXPathSelector(response)
         drink = Drink()
 
-        drink['name'] = hxs.select("//div[@id='drinkRecipe']/h2/text()")
+        drink['name'] = hxs.select("//div[@id='drinkRecipe']/h2/text()").extract()[0]
         drink['rating'] = None
         drink['num_reviews'] = None
         drink['tags'] = None
-        drink['directions'] = hxs.select("//div[@id='drinkRecipe']/p[position()=2]").extract()
-
+        drink['directions'] = hxs.select("//div[@id='drinkRecipe']/p[position()=2]").extract()[0]
+        drink['ingredients'] = []
+        unit_analyzer = Unit_Analyzer()
+        ingredient_strings = hxs.select("//div[@id='drinkRecipe']/ul/li")
+        for ingredient_string in ingredient_strings:
+            final_triple = unit_analyzer.get_triple(ingredient_string.select('text()').extract()[0])
+            drink['ingredients'].append(final_triple)
+            
         log.msg('Drink retrieved: %s' % drink, level=log.INFO)
         return drink
