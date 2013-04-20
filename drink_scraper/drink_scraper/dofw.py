@@ -53,5 +53,7 @@ class Dofw(BaseSpider):
             final_triple = unit_analyzer.get_triple(ingredient_string.select('text()').extract()[0])
             drink['ingredients'].append(final_triple)
 
+        drink['directions'] = hxs.select("//div[@class='entry']/div[3]/p/text()").extract()
+
         log.msg('Drink retrieved: %s' % drink, level=log.INFO)
         return drink
