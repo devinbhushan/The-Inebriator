@@ -24,7 +24,10 @@ def search(request):
         if form.is_valid():
             cd = form.cleaned_data
             search = cd['search']
-            drinks = Drink.objects.filter(name__contains=search)
+            terms = search.split()
+            drinks = Drink.objects.all()
+            for term in terms:
+                drinks = drinks.filter(name__contains=term).distinct()
             if len(drinks)== 0:
                 drinks = "None"
             return render_to_response('search.html', {'form': form, 'results':drinks},
