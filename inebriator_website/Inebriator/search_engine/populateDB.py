@@ -1,6 +1,13 @@
 import json
-from models.Drink import Drink
 import os
+import sys
+
+PWD = os.path.dirname(os.path.realpath(__file__ ))
+filepath = os.path.abspath(os.path.join(PWD, "..", ".."))
+sys.path.append(filepath)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'Inebriator.settings'
+
+from models import *
 
 path = os.path.dirname(os.path.realpath(__file__))
 
