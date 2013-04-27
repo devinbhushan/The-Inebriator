@@ -32,7 +32,7 @@ def search(request, page=1):
             if len(drinks)== 0:
                 drinks = "None"
             return render_to_response('search.html', {'form': form,
-                                                      'results':drinks[(page-1)*50:page*50],
+                                                      'results':drinks[(page-1)*500:page*500],
                                                       'page':page,
                                                       'next':page+1,
                                                       'prev':page-1},
