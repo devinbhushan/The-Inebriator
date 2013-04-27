@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Drink(models.Model):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250, primary_key=True)
     rating =  models.CharField(max_length=250, null=True)
     num_ratings =  models.CharField(max_length=250, null=True)
     directions = models.TextField()

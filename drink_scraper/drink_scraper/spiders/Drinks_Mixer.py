@@ -27,7 +27,7 @@ class Drinks_Mixer(BaseSpider):
         log.msg("Beginning parse function", level=log.INFO)
         hxs = HtmlXPathSelector(response)
         outer_links = hxs.select("//div[@class='l1a']")
-        log.msg('number outer_links: %s' % len(outer_links), level=log.INFO)
+        #log.msg('number outer_links: %s' % len(outer_links), level=log.INFO)
 
         drinks_retrieved = 0
         for outer_link in outer_links:

@@ -13,7 +13,7 @@ import csv
 
 path = os.path.dirname(os.path.realpath(__file__))
 
-csvfile = open('%s/../../../drink_scraper/dofw.csv' % path, 'rb')
+csvfile = open('%s/../../../drink_scraper/gc.csv' % path, 'rb')
 data = csv.reader(csvfile)
 
 header = True
