@@ -15,7 +15,7 @@ def home(request):
     """
     return render_to_response('home.html')
 
-def search(request, drinks, page=1):
+def search(request, page=1):
     """
     Search page
     """
