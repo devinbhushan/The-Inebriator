@@ -8,7 +8,7 @@ class Drink(models.Model):
     #tags = models.ManyToManyField("Tag")
     ingredients = models.ManyToManyField("Ingredient")
     class Meta:
-        app_label = "drink"
+        app_label = "search_engine"
 
     def __unicode__(self):
         return self.name
@@ -21,7 +21,7 @@ class Ingredient(models.Model):
     unit = models.CharField(max_length=250)
     amount = models.IntegerField()
     class Meta:
-        app_label = "ingredient"
+        app_label = "search_engine"
 
     def __unicode__(self):
         return self.name
