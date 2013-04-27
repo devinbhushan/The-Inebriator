@@ -1,0 +1,59 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>
+
+<meta charset="utf-8"> 
+<title>The Inebriator</title> 
+<meta name="description" content="The Personel Website of Michael Willingham">
+
+<link href="/static/twitter-bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+<link href="/static/twitter-bootstrap/docs/assets/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="/static/twitter-bootstrap/docs/assets/css/main.css" rel="stylesheet">
+<script src="/static/media/tiny_mce/tiny_mce.js"> </script>
+<script src="/static/media/tiny_mce/textareas.js"> </script>
+
+</head>
+  
+
+
+<!-- Navbar 
+=========================================================== -->
+<div class="navbar navbar-fixed-top">  
+  <div class="navbar-inner">  
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+        <!--navigation does here-->
+      <div class="nav-collapse">
+      <ul class="nav">
+        <li class="active">
+          <a class="brand" href="/">Inebriator</a>
+        </li>
+        <li><a href="/search/">Search</a></li>
+        <li><a href="/trending/">Trending</a></li>
+        <li><a href="/popular/">Popular</a></li>
+        <li class="divider-vertical"></li>
+        <!--{% if request_user.is_authenticated %}-->
+          <!--<li><a href="#">Logout</a></li>-->
+        <!--{% else %}-->
+          <!--<li><a href="#">Login</a></li>-->
+        <!--{% endif %}-->
+   
+      </ul>
+      </div>
+    </div>  
+  </div>  
+</div>
+
+<div class="container">
+
+<hr class="soften">
+
+{% block content %}
+
+{% endblock %}
+
+</html> 
