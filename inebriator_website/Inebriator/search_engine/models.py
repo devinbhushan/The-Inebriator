@@ -7,6 +7,8 @@ class Drink(models.Model):
     directions = models.CharField(max_length=250)
     #tags = models.ManyToManyField("Tag")
     ingredients = models.ManyToManyField("Ingredient")
+    class Meta:
+        app_label = "drink"
 
     def __unicode__(self):
         return self.name
@@ -18,6 +20,8 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=250)
     unit = models.CharField(max_length=250)
     amount = models.IntegerField()
+    class Meta:
+        app_label = "ingredient"
 
     def __unicode__(self):
         return self.name

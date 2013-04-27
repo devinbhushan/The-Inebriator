@@ -1,12 +1,12 @@
 from scrapy.spider import BaseSpider
 from scrapy.selector import HtmlXPathSelector
-from items import Drink
+from drink_scraper.items import Drink
 from scrapy import log
 from scrapy.http import Request
- 
- 
+from drink_scraper.unit_analyzer import Unit_Analyzer
+
 class GC(BaseSpider):
-    """ 
+    """
     Spider for Good Cocktails
     """
     name = "gc"
@@ -14,7 +14,7 @@ class GC(BaseSpider):
     start_urls = ["http://www.goodcocktails.com/recipes/browse_drinks.php?letter=ALL"]
 
     def parse(self, response):
-        """ 
+        """
         Parse function to get each drink's link and parse it
         """
         log.msg("Beginning parse function", level=log.INFO)

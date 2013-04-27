@@ -8,11 +8,19 @@ sys.path.append(filepath)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'Inebriator.settings'
 
 from models import *
+import csv
 
 path = os.path.dirname(os.path.realpath(__file__))
 
-with open('%s/../../drink_scraper/dofw_data.json' % path) as data_file:
-    data = json.load(data_file)
-drink_name = data['name']
-drink = Drink(name=name)
-drink.save()
+csvfile = open('%s/../../../drink_scraper/dofw.csv' % path, 'rb')
+data = csv.reader(csvfile)
+
+i = 0
+for row in data:
+    if i is 0:
+        i += 1
+        continue
+    print row
+    drink_name = row[2]
+    drink = Drink(name=drink_name)
+    drink.save()
