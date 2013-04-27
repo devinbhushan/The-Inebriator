@@ -28,14 +28,39 @@
         </div><!--/span-->
 {% endblock sidebar %}
 
-{% block articles %}
+{% block search %}
 <div class="span8">
     <div class="well">
-    <ul>
-        <h3> Search Box goes here? </h3>
-    </ul>
+        <ul>
+            <h3> Drink Search: </h3>
+            
+            {% if form.errors %}
+                <p style="color: red;">
+                    Please correct the error{{ form.errors|pluralize }} below.
+                </p>
+            {% endif %}
+            
+            <form action="" method="post"> 
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+            
+            {% if results %} 
+                <h3> Results: </h3>
+                    {% if results == "None" %}
+                        <p> No Results
+                    {% else %}
+                        {% for drink in results %}
+                        <p> Name: {{ drink.name }}
+                        {% endfor %}
+                    {% endif %}
+            {% endif %}
+        </ul>
     </div> <!--/span -->
-{% endblock articles %}
+{% endblock search %}
 
 {% block footer %}
 <!-- Bottom Page Markers, Prev, Next -->

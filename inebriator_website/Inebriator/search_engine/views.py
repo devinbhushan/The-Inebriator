@@ -3,8 +3,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.loader import get_template
 from django.template import Context, RequestContext
+from django.template.defaulttags import csrf_token
 from models import *
-#from forms import *
+from forms import *
 #from django.conf import settings
 #import sys
 
@@ -18,7 +19,20 @@ def search(request):
     """
     Search page
     """
-    return render_to_response('search.html')
+    if request.method == "POST":
+        form = Search_Form(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            search = cd['search']
+            drinks = Drink.objects.filter(name__contains=search)
+            if len(drinks)== 0:
+                drinks = "None"
+            return render_to_response('search.html', {'form': form, 'results':drinks},
+                                      context_instance=RequestContext(request))
+    else:
+        form = Search_Form()
+        return render_to_response('search.html', {'form': form},
+                                  context_instance=RequestContext(request))
 
 def trending(request):
     """

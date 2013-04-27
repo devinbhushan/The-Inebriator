@@ -11,3 +11,14 @@ from models import *
     #class Meta:
         #model = Category
 #        exclude = ('slug')
+
+class Search_Form(forms.Form):
+    search = forms.CharField(max_length=100, required=False, label="Drink Name")
+
+    #def __init__(self, *args, **kwargs):
+        #num_ingredients = kwargs.pop('num_ingredients',1)
+        #super(Search_Form, self).__init__(*args, **kwargs)
+
+        #for ingredient in range(0, num_ingredients):
+            #field = forms.CharField(label="Ingredient")
+    #        self.fields[str(ingredient)] = field
