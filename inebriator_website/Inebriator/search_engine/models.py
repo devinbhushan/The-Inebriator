@@ -1,12 +1,14 @@
 from django.db import models
 
+
 class Drink(models.Model):
     name = models.CharField(max_length=250)
-    rating = models.IntegerField()
-    num_ratings = models.IntegerField()
-    directions = models.CharField(max_length=250)
+    rating =  models.CharField(max_length=250, null=True)
+    num_ratings =  models.CharField(max_length=250, null=True)
+    directions = models.TextField()
     #tags = models.ManyToManyField("Tag")
     ingredients = models.ManyToManyField("Ingredient")
+
     class Meta:
         app_label = "search_engine"
 
@@ -18,11 +20,11 @@ class Drink(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=250)
-    unit = models.CharField(max_length=250)
-    amount = models.IntegerField()
+    unit = models.CharField(max_length=250, null=True)
+    amount = models.CharField(max_length=250, null=True)
+
     class Meta:
         app_label = "search_engine"
 
     def __unicode__(self):
         return self.name
-
