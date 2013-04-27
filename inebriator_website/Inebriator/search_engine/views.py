@@ -25,13 +25,14 @@ def search(request, page=1):
             cd = form.cleaned_data
             search = cd['search']
             terms = search.split()
-            drinks = Drink.objects.all()
+            drinks = []
             for term in terms:
-                drinks = drinks.filter(name__contains=term).distinct()
+                drinks.extend(list(Drink.objects.filter(name__contains=term).distinct()))
+            drinks = list(set(drinks))
             if len(drinks)== 0:
                 drinks = "None"
             return render_to_response('search.html', {'form': form,
-                                                      'results':drinks[(page-1)*10:page*5],
+                                                      'results':drinks[(page-1)*50:page*50],
                                                       'page':page,
                                                       'next':page+1,
                                                       'prev':page-1},
