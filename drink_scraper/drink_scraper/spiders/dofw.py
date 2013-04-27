@@ -5,11 +5,11 @@ from scrapy import log
 from scrapy.http import Request
 from drink_scraper.unit_analyzer import Unit_Analyzer
 
-      
+
 class Dofw(BaseSpider):
-    """ 
+    """
     Spider for http://www.drinkoftheweek.com/list-drinks-a-z/
-    """ 
+    """
     name = "dofw"
     allowed_domains = ["drinkoftheweek.com"]
     start_urls = ["http://www.drinkoftheweek.com/list-drinks-a-z/"]
@@ -38,8 +38,8 @@ class Dofw(BaseSpider):
         drink = Drink()
 
         drink['name'] = hxs.select("//h2[@class='pagetitle']/text()").extract()[0]
-        drink['rating'] = hxs.select("//meta[@itemprop='ratingValue']/@content").extract()[0]
-        drink['num_reviews'] = hxs.select("//meta[@itemprop='ratingCount']/@content").extract()[0]
+        drink['rating'] = None#hxs.select("//meta[@itemprop='ratingValue']/@content").extract()[0]
+        drink['num_reviews'] = None#hxs.select("//meta[@itemprop='ratingCount']/@content").extract()[0]
 
         drink['tags'] = []
         tags = hxs.select("//div[@class='posttags']/a[@rel='tag']")
