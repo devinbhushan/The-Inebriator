@@ -15,7 +15,7 @@ def home(request):
     """
     return render_to_response('home.html')
 
-def search(request):
+def search(request, drinks, page=1):
     """
     Search page
     """
@@ -30,7 +30,11 @@ def search(request):
                 drinks = drinks.filter(name__contains=term).distinct()
             if len(drinks)== 0:
                 drinks = "None"
-            return render_to_response('search.html', {'form': form, 'results':drinks},
+            return render_to_response('search.html', {'form': form,
+                                                      'results':drinks[(page-1)*10:page*5],
+                                                      'page':page,
+                                                      'next':page+1,
+                                                      'prev':page-1},
                                       context_instance=RequestContext(request))
     else:
         form = Search_Form()

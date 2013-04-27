@@ -64,23 +64,25 @@
 
 {% block footer %}
 <!-- Bottom Page Markers, Prev, Next -->
-<!--<div class="pagination">  -->
-    <!--<ul>-->
-        <!--{% if page > 1 %}-->
-            <!--<li><a href="/blog/{{prev}}">Prev</a></li>-->
-        <!--{% endif %}-->
-        <!--{% for p in pagination %}-->
-            <!--{% if p == page %}-->
-                <!--<li class="active">  -->
-                    <!--<a href="/blog/{{p}}">{{p}}</a>  -->
-                <!--</li>-->
-            <!--{% else %}-->
-                <!--<li><a href="/blog/{{p}}">{{p}}</a></li>-->
-            <!--{% endif %}-->
-        <!--{% endfor %}-->
-        <!--<li><a href="/blog/{{next}}">Next</a></li>  -->
-    <!--</ul>  -->
-<!--</div> --> 
+{% if results %}
+    <div class="pagination">  
+        <ul>
+            {% if page > 1 %}
+                <li><a href="/search/{{prev}}">Prev</a></li>
+            {% endif %}
+            {% for p in pagination %}
+                {% if p == page %}
+                    <li class="active">  
+                        <a href="/search/{{p}}">{{p}}</a>  
+                    </li>
+                {% else %}
+                    <li><a href="/search/{{p}}">{{p}}</a></li>
+                {% endif %}
+            {% endfor %}
+            <li><a href="/search/{{next}}">Next</a></li>  
+        </ul>  
+    </div>  
+{% endif %}
 </div> <!--well -->
 {% endblock footer %}
 {% endblock content %}
