@@ -106,14 +106,16 @@
                         var req_inputs = $(".required div");
                         var req_list = new Array();
                         req_inputs.each(function(index) {
-                            req_list[index] = $(this).text();
+                            console.log("required request made: " + $(this).text().substring(2, $(this).text().length));
+                            req_list[index] = $(this).text().substring(2, $(this).text().length);
                         });
                         //req_list = req_list.join(',');
                         console.log(req_list);
                         var opt_inputs = $(".optional div");
                         var opt_list = new Array();
                         opt_inputs.each(function(index) {
-                            opt_list[index] = $(this).text();
+                            console.log("optional request made:: " + $(this).text().substring(2, $(this).text().length));
+                            opt_list[index] = $(this).text().substring(2, $(this).text().length);
                         });
                         //opt_list = opt_list.join(',');
                         $.ajax({
@@ -121,9 +123,17 @@
                             url: '/search/',
                             data: {"required": req_list, "optional": opt_list},
                             success:function(response) {
-                                        console.log("success: " + response[0]);
-                                        for (key in response[0]['fields'])
-                                            console.log("key: " + key + " value: " + response[0]['fields'][key])
+                                        $('.results div').remove();
+                                        if ($(response).length == 0) {
+                                            $('.results').append("<div class='result_box well'> <p class='result_title'> No Results</p> </div>")
+                                        }
+                                        else {
+                                            $(response).each(function(index, drink) {
+                                                $('.results').append("<div class='result_box well'> <p class='result_title'>"
+                                                                        +drink['pk']+ ": </p><p>" + unescape(encodeURIComponent(
+                                                                        drink['fields']['directions'])) + " </p></div>");
+                                            });
+                                        }
                                     },
                             error:function (xhr, textStatus, thrownError) 
                                 {
@@ -137,24 +147,31 @@
                         {
                             //$('#id_search').val($('#id_search').val()+","+$('#search').val());
                             if ($('#req_radio').hasClass('active'))
-                                $('.required').append("<div class='alert alert-info'>"+$('#search').val()+"</div>");
+                                $('.required').append("<div class='alert alert-info'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
                             else
-                                $('.optional').append("<div class='alert alert-success'>"+$('#search').val()+"</div>");
+                                $('.optional').append("<div class='alert alert-success'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
                         }
                         else
                         {
                             //$('#id_search').val($("#search").val())
                             if ($('#req_radio').hasClass('active'))
-                                $('.required').append("<div class='alert alert-info'>"+$('#search').val()+"</div>");
+                                $('.required').append("<div class='alert alert-info'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
                             else
-                                $('.optional').append("<div class='alert alert-success'>"+$('#search').val()+"</div>");
+                                $('.optional').append("<div class='alert alert-success'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
                         }
                         $('#search').val('');
                         console.log("req input val:" + $('#id_search').val());
                     });
                 });
             </script>
-
+            <div class="results">
+                <h3>Results:</h3>
+                <div class="result_box well">
+                    <p class="result_title">
+                        No Results
+                    </p>
+            i   </div>
+            </div>
             {% if results %} 
                 <h3> Results: </h3>
                     {% if results == "None" %}

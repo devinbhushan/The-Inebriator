@@ -33,7 +33,7 @@ def search(request, page=1):
             drinks.extend(list(Drink.objects.filter(name__contains=term).distinct()))
         drinks = list(set(drinks))
         if len(drinks)== 0:
-            drinks = "None"
+            drinks = []
         return HttpResponse(serializers.serialize("json",drinks), mimetype='application/json')#render_to_response('search.html', {'form': form,
                                                     #'results':drinks[(page-1)*500:page*500],
                                                     #'page':page,
