@@ -28,3 +28,13 @@ class Ingredient(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class Frequency(models.Model):
+    name = models.CharField(max_length=250)
+    quantity = models.DecimalField(25,24)
+    
+    class Meta:
+        app_label = "search_engine"
+
+    def __unicode__(self):
+        return self.name
