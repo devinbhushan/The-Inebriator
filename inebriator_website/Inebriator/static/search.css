@@ -1,0 +1,15 @@
+.required .alert {
+    display:inline-block;
+    margin-top:10px;
+}
+.optional .alert {
+    display:inline-block;
+    margin-top:10px;
+}
+.optional, .required {
+    margin-bottom:10px;
+}
+#ingredient_entry {
+    margin-left:10px;
+    margin-bottom:10px;
+}
