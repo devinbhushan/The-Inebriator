@@ -8,6 +8,7 @@ from models import *
 from forms import *
 from django.utils import simplejson
 from django.core import serializers
+from django.db.models import Q
 #from django.conf import settings
 #import sys
 
@@ -30,8 +31,12 @@ def search(request, page=1):
         print "terms: %s" % terms
         drinks = []
         for term in terms:
-            drinks.extend(list(Drink.objects.filter(name__contains=term).distinct()))
+            drinks.extend(list(Drink.objects.
+                                filter(Q(name__contains=term) |
+                                        Q(ingredients__name__contains=term))
+                            .distinct()))
         drinks = list(set(drinks))
+
         if len(drinks)== 0:
             drinks = []
         return HttpResponse(serializers.serialize("json",drinks), mimetype='application/json')#render_to_response('search.html', {'form': form,
@@ -40,6 +45,7 @@ def search(request, page=1):
                                                     #'next':page+1,
                                                     #'prev':page-1},
          #                           context_instance=RequestContext(request))
+
     else:
         form = Search_Form()
         return render_to_response('search.html', {'form': form},
