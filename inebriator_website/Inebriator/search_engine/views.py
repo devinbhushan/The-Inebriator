@@ -6,6 +6,7 @@ from django.template import Context, RequestContext
 from django.template.defaulttags import csrf_token
 from models import *
 from forms import *
+from django.db.models import Q
 #from django.conf import settings
 #import sys
 
@@ -22,21 +23,34 @@ def search(request, page=1):
     if request.method == "POST":
         form = Search_Form(request.POST)
         if form.is_valid():
+
+            # Get information from the form
             cd = form.cleaned_data
             search = cd['search']
             terms = search.split()
+
+            # Query for drinks with terms matching drink or
+            # ingredients.
             drinks = []
             for term in terms:
-                drinks.extend(list(Drink.objects.filter(name__contains=term).distinct()))
+                drinks.extend(list(Drink.objects.
+                                   filter(Q(name__contains=term) |
+                                          Q(ingredients__name__contains=term))
+                                   .distinct()))
             drinks = list(set(drinks))
+
+            # There are no drinks. Return no results
             if len(drinks)== 0:
                 drinks = "None"
+
+            # Pass in results and render the html page
             return render_to_response('search.html', {'form': form,
                                                       'results':drinks[(page-1)*500:page*500],
                                                       'page':page,
                                                       'next':page+1,
                                                       'prev':page-1},
                                       context_instance=RequestContext(request))
+    # The user has not made a query
     else:
         form = Search_Form()
         return render_to_response('search.html', {'form': form},
