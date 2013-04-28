@@ -6,6 +6,8 @@ from django.template import Context, RequestContext
 from django.template.defaulttags import csrf_token
 from models import *
 from forms import *
+from django.utils import simplejson
+from django.core import serializers
 #from django.conf import settings
 #import sys
 
@@ -19,24 +21,25 @@ def search(request, page=1):
     """
     Search page
     """
-    if request.method == "POST":
-        form = Search_Form(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            search = cd['search']
-            terms = search.split()
-            drinks = []
-            for term in terms:
-                drinks.extend(list(Drink.objects.filter(name__contains=term).distinct()))
-            drinks = list(set(drinks))
-            if len(drinks)== 0:
-                drinks = "None"
-            return render_to_response('search.html', {'form': form,
-                                                      'results':drinks[(page-1)*500:page*500],
-                                                      'page':page,
-                                                      'next':page+1,
-                                                      'prev':page-1},
-                                      context_instance=RequestContext(request))
+    print "dsdf %s" % request
+    if request.POST:
+        if request.is_ajax():
+            print "ajax!"
+        terms = request.POST.getlist('required[]')
+        optional = request.POST.getlist('optional[]')
+        print "terms: %s" % terms
+        drinks = []
+        for term in terms:
+            drinks.extend(list(Drink.objects.filter(name__contains=term).distinct()))
+        drinks = list(set(drinks))
+        if len(drinks)== 0:
+            drinks = "None"
+        return HttpResponse(serializers.serialize("json",drinks), mimetype='application/json')#render_to_response('search.html', {'form': form,
+                                                    #'results':drinks[(page-1)*500:page*500],
+                                                    #'page':page,
+                                                    #'next':page+1,
+                                                    #'prev':page-1},
+         #                           context_instance=RequestContext(request))
     else:
         form = Search_Form()
         return render_to_response('search.html', {'form': form},

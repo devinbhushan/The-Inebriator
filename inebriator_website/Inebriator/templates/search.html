@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
 {% block header %}
 <!-- Header
 ================================================== -->
@@ -39,15 +38,123 @@
                     Please correct the error{{ form.errors|pluralize }} below.
                 </p>
             {% endif %}
-            
             <form action="" method="post"> 
                 {% csrf_token %}
                 <table>
+                    Ingredient: <input id="search" type="text">
+                    <button id="ingredient_entry" class="btn btn-primary" type="button">Add Ingredient</button>
+                    <div class="btn-group ingredient_select" data-toggle="buttons-radio">
+                        <button id='req_radio' type="button" class="btn btn-primary active" data_toggle="button">Required</button>
+                        <button id='opt_radio' type="button" class="btn btn-primary" data_toggle="button">Optional</button>
+                    </div>
+                    <div class="required">
+                        <h3>Required:</h3>
+                    </div>
+                    <div class="optional">
+                        <h3>Optional:</h3>
+                    </div>
                     {{ form.as_table }}
                 </table>
-                <input type="submit" value="Submit">
+                <input id="form_submit" type="submit" value="Submit" class="btn btn-primary">
             </form>
-            
+
+            <script>
+                $(document).ajaxSend(function(event, xhr, settings) {
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    function sameOrigin(url) {
+                        // url could be relative or scheme relative or absolute
+                        var host = document.location.host; // host + port
+                        var protocol = document.location.protocol;
+                        var sr_origin = '//' + host;
+                        var origin = protocol + sr_origin;
+                        // Allow absolute or scheme relative URLs to same origin
+                        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                            // or any other URL that isn't scheme relative or absolute i.e relative.
+                            !(/^(\/\/|http:|https:).*/.test(url));
+                    }
+                    function safeMethod(method) {
+                        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                    }
+
+                    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                });
+            </script>
+
+            <script>
+                $(document).ready(function() {
+                    $('.btn-group').button();
+                    $('form table').hide();
+                    $('form').submit(function(e) {
+                        e.preventDefault();
+                        var req_inputs = $(".required div");
+                        var req_list = new Array();
+                        req_inputs.each(function(index) {
+                            req_list[index] = $(this).text();
+                        });
+                        //req_list = req_list.join(',');
+                        console.log(req_list);
+                        var opt_inputs = $(".optional div");
+                        var opt_list = new Array();
+                        opt_inputs.each(function(index) {
+                            opt_list[index] = $(this).text();
+                        });
+                        //opt_list = opt_list.join(',');
+                        $.ajax({
+                            type: "POST",
+                            url: '/search/',
+                            data: {"required": req_list, "optional": opt_list},
+                            success:function(response) {
+                                        console.log("success: " + response[0]);
+                                        for (key in response[0]['fields'])
+                                            console.log("key: " + key + " value: " + response[0]['fields'][key])
+                                    },
+                            error:function (xhr, textStatus, thrownError) 
+                                {
+                                    console.log("xhr: " + xhr + " textStatus: " + textStatus + " thrownError: " + thrownError);
+                                }
+                            });
+                    });
+                    $("#ingredient_entry").click(function(e) {
+                        e.preventDefault();
+                        if ($('#id_search').val() != "")
+                        {
+                            //$('#id_search').val($('#id_search').val()+","+$('#search').val());
+                            if ($('#req_radio').hasClass('active'))
+                                $('.required').append("<div class='alert alert-info'>"+$('#search').val()+"</div>");
+                            else
+                                $('.optional').append("<div class='alert alert-success'>"+$('#search').val()+"</div>");
+                        }
+                        else
+                        {
+                            //$('#id_search').val($("#search").val())
+                            if ($('#req_radio').hasClass('active'))
+                                $('.required').append("<div class='alert alert-info'>"+$('#search').val()+"</div>");
+                            else
+                                $('.optional').append("<div class='alert alert-success'>"+$('#search').val()+"</div>");
+                        }
+                        $('#search').val('');
+                        console.log("req input val:" + $('#id_search').val());
+                    });
+                });
+            </script>
+
             {% if results %} 
                 <h3> Results: </h3>
                     {% if results == "None" %}
@@ -86,5 +193,3 @@
 </div> <!--well -->
 {% endblock footer %}
 {% endblock content %}
-
-
