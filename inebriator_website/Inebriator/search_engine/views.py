@@ -7,6 +7,7 @@ from django.template.defaulttags import csrf_token
 from models import *
 from forms import *
 from django.db.models import Q
+from ranking import *
 #from django.conf import settings
 #import sys
 
@@ -40,12 +41,27 @@ def search(request, page=1):
             drinks = list(set(drinks))
 
             # There are no drinks. Return no results
-            if len(drinks)== 0:
-                drinks = "None"
+            #if drinks.qsize() == 0:
+            if len(drinks) == 0:
+                drinks_list = "None"
+            else:
+                drinks_tuple = rank(terms, drinks)
+                drinks_list = []
+                for drink in drinks_tuple:
+                    drinks_list.append(drink[0])
+
+
+            """
+            drinks_list = []
+            while not drinks.empty():
+                drink = drinks.get()
+                #print drink.name
+                drinks_list.append(drink)
+            """
 
             # Pass in results and render the html page
             return render_to_response('search.html', {'form': form,
-                                                      'results':drinks[(page-1)*500:page*500],
+                                                      'results':drinks_list[(page-1)*500:page*500],
                                                       'page':page,
                                                       'next':page+1,
                                                       'prev':page-1},

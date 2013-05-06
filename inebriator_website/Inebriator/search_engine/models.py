@@ -30,9 +30,9 @@ class Ingredient(models.Model):
         return self.name
 
 class Frequency(models.Model):
-    name = models.CharField(max_length=250)
-    quantity = models.DecimalField(25,24)
-    
+    name = models.CharField(max_length=250, primary_key=True)
+    quantity = models.DecimalField(max_digits=25,decimal_places=24)
+
     class Meta:
         app_label = "search_engine"
 

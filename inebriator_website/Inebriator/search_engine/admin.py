@@ -6,4 +6,5 @@ from Inebriator.search_engine.models import *
 #admin.site.register(BlogEntry, BlogEntryAdmin)
 admin.site.register(Drink)
 admin.site.register(Ingredient)
+admin.site.register(Frequency)
 
