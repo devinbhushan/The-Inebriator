@@ -9,6 +9,7 @@ from forms import *
 from django.utils import simplejson
 from django.core import serializers
 from django.db.models import Q
+from ranking import *
 #from django.conf import settings
 #import sys
 
@@ -39,6 +40,12 @@ def search(request, page=1):
 
         if len(drinks)== 0:
             drinks = []
+        else:
+            drinks_tuple = rank(terms, drinks)
+            drinks_list = []
+            for drink in drinks_tuple:
+                drinks_list.append(drink[0])
+
         return HttpResponse(serializers.serialize("json",drinks), mimetype='application/json')#render_to_response('search.html', {'form': form,
                                                     #'results':drinks[(page-1)*500:page*500],
                                                     #'page':page,
