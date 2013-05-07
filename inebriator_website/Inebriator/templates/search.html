@@ -1,3 +1,10 @@
+<div class="modal-backdrop hide">
+    <div class="modal" id="beer">
+        <div class="modal-body">
+            <img src="/static/beer-gif.gif">
+        </div>
+    </div>
+</div>
 {% extends "base.html" %}
 {% block content %}
 {% block header %}
@@ -123,6 +130,7 @@
                                 type: "POST",
                                 url: '/search/',
                                 data: {"required": req_list, "optional": opt_list},
+                                beforeSend: function() {console.log("before send");$(".modal-backdrop").show();},
                                 success:function(response) {
                                             $('.results div').remove();
                                             if ($(response).length == 0) {
@@ -139,7 +147,8 @@
                                 error:function (xhr, textStatus, thrownError) 
                                     {
                                         console.log("xhr: " + xhr + " textStatus: " + textStatus + " thrownError: " + thrownError);
-                                    }
+                                    },
+                                complete: function() {$(".modal-backdrop").hide();}
                                 });
                         }
                     });
@@ -177,7 +186,7 @@
             {% if results %} 
                 <h3> Results: </h3>
                     {% if results == "None" %}
-                        <p> No Results
+                    <p> No Results </p>
                     {% else %}
                         {% for drink in results %}
                         <p> Name: {{ drink.name }}
