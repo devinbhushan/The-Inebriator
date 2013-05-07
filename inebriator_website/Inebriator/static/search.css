@@ -31,3 +31,7 @@
     font-weight:bold;
     color:blue;
 }
+.video {
+    position: absolute;
+    left: 35%;
+}
