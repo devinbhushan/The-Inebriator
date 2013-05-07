@@ -42,20 +42,43 @@
                 </div>
             {% else %}
                 {% for drink in results %}
-                    <div class="result_box well">
-                        <h4> {{ drink.name }} </h4>
-                        <p class="results_title">
-                            Ingredients:
-                        </p>
+                    <div class="result_box well"> 
+                        <h3 class="result_title"> {{drink.name}} </h3>
+                        <p class="secondary_title">Directions</p>
+                        <p> {{drink.directions}} </p>
+                        <p class="secondary_title">Ingredients </p>
                         {% for ingredient in drink.ingredients.all %}
-                        <p> {{ ingredient.name }}
+                            <p> {{ingredient.name}} </p>
                         {% endfor %}
-                        <p class="result_title"> 
-                            Directions:
-                        </p>
+                        <a href="/make/{{drink.name}}">Make this drink!</a> 
                     </div>
                 {% endfor %}
             {% endif %}
+    
+        <!--<div class="results">-->
+            <!--<h3>Available Drinks:</h3>-->
+            <!--{% if results == "None" %}-->
+                <!--<div class="result_box well">-->
+                    <!--<p class="result_title">-->
+                        <!--No Results-->
+                    <!--</p>-->
+                <!--</div>-->
+            <!--{% else %}-->
+                <!--{% for drink in results %}-->
+                    <!--<div class="result_box well">-->
+                        <!--<h4> {{ drink.name }} </h4>-->
+                        <!--<p class="results_title">-->
+                            <!--Ingredients:-->
+                        <!--</p>-->
+                        <!--{% for ingredient in drink.ingredients.all %}-->
+                        <!--<p> {{ ingredient.name }}-->
+                        <!--{% endfor %}-->
+                        <!--<p class="result_title"> -->
+                            <!--Directions:-->
+                        <!--</p>-->
+                    <!--</div>-->
+                <!--{% endfor %}-->
+            <!--{% endif %}-->
         </div>  
     </ul>
     </div> <!--/span -->

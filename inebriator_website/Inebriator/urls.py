@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     (r'^search/(?P<page>\d{1})/', "search"),
     (r'^raspberry/', raspberry),
     (r'^popular/', popular),
+    (r'^make/(?P<drink>[\w ]+)/$', make_drink),
 )

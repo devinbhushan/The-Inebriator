@@ -15,6 +15,8 @@ import json
 #from django.conf import settings
 #import sys
 
+RASPBERRY_IP='192.168.1.107'
+
 def home(request):
     """
     Home page of the website
@@ -92,8 +94,8 @@ def raspberry(request):
     #Connect to the Raspberry Pi
     try:
         client_obj = Client()
-        client_obj.connect('192.168.1.107', 9999)
-        client_obj.send("8======D~~~~~~~O:")
+        client_obj.connect(RASPBERRY_IP, 9999)
+        client_obj.send("Ingredient Request:")
         pi_ingredients = json.loads(client_obj.listen())
         print "message received!: %s" % pi_ingredients
         master_set = set(Drink.objects.all())
@@ -137,3 +139,21 @@ def popular(request):
     Popular section of the website
     """
     return render_to_response('popular.html')
+
+def make_drink(request, drink):
+    drink_name = drink.replace("%20", " ");
+    print "Making: %s" % drink
+    drink = Drink.objects.get(name=drink_name)
+    print "Retreived drink: %s" % drink.name
+
+    try:
+        client_obj = Client()
+        client_obj.connect(RASPBERRY_IP, 9999)
+        drink_message = "Make me: %s" % drink.name
+        client_obj.send(drink_message)
+        message = "Success! Your drink was sent!"
+    except:
+        message = "Failed. Not connected to the raspberry Pi"
+
+    return render_to_response('make_drink.html', {'message':message})
+
