@@ -10,6 +10,7 @@ from django.utils import simplejson
 from django.core import serializers
 from django.db.models import Q
 from ranking import *
+from client import Client
 #from django.conf import settings
 #import sys
 
@@ -72,8 +73,12 @@ def trending(request):
     """
     Trending section of the website
     """
-    return render_to_response('trending.html')
-
+    client_obj = Client()
+    client_obj.connect('192.168.1.105', 9999)
+    client_obj.send("8======D~~~~~~~O:")
+    msg_received = client_obj.listen()
+    print "message received!: %s" % msg_received
+    return render_to_response('trending.html', {'msg':msg_received})
 def popular(request):
     """
     Popular section of the website
