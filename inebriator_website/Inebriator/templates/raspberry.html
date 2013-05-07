@@ -6,8 +6,8 @@
 ================================================== -->
 <header class="page-header">
   <div class="inner">
-      <h1>Trending page
-          <small>Most recently popular drinks</small>
+      <h1>Raspberry Pi
+          <small>What drinks can you make with your raspberry Pi?</small>
       </h1>
 </header>
 {% endblock header %}
@@ -32,10 +32,31 @@
 <div class="span8">
     <div class="well">
     <ul>
-        <div class="messages">
-            {{msg}}
-        </div>
-        <h3> Trends go here </h3>
+        <div class="results">
+            <h3>Available Drinks:</h3>
+            {% if results == "None" %}
+                <div class="result_box well">
+                    <p class="result_title">
+                        No Results
+                    </p>
+                </div>
+            {% else %}
+                {% for drink in results %}
+                    <div class="result_box well">
+                        <h4> {{ drink.name }} </h4>
+                        <p class="results_title">
+                            Ingredients:
+                        </p>
+                        {% for ingredient in drink.ingredients.all %}
+                        <p> {{ ingredient.name }}
+                        {% endfor %}
+                        <p class="result_title"> 
+                            Directions:
+                        </p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>  
     </ul>
     </div> <!--/span -->
 {% endblock articles %}
