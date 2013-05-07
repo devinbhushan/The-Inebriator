@@ -118,28 +118,30 @@
                             opt_list[index] = $(this).text().substring(2, $(this).text().length);
                         });
                         //opt_list = opt_list.join(',');
-                        $.ajax({
-                            type: "POST",
-                            url: '/search/',
-                            data: {"required": req_list, "optional": opt_list},
-                            success:function(response) {
-                                        $('.results div').remove();
-                                        if ($(response).length == 0) {
-                                            $('.results').append("<div class='result_box well'> <p class='result_title'> No Results</p> </div>")
-                                        }
-                                        else {
-                                            $(response).each(function(index, drink) {
-                                                $('.results').append("<div class='result_box well'> <p class='result_title'>"
-                                                                        +drink['pk']+ ": </p><p>" + unescape(encodeURIComponent(
-                                                                        drink['fields']['directions'])) + " </p></div>");
-                                            });
-                                        }
-                                    },
-                            error:function (xhr, textStatus, thrownError) 
-                                {
-                                    console.log("xhr: " + xhr + " textStatus: " + textStatus + " thrownError: " + thrownError);
-                                }
-                            });
+                        if (opt_list.length + req_list.length > 0) {
+                            $.ajax({
+                                type: "POST",
+                                url: '/search/',
+                                data: {"required": req_list, "optional": opt_list},
+                                success:function(response) {
+                                            $('.results div').remove();
+                                            if ($(response).length == 0) {
+                                                $('.results').append("<div class='result_box well'> <p class='result_title'> No Results</p> </div>")
+                                            }
+                                            else {
+                                                $(response).each(function(index, drink) {
+                                                    $('.results').append("<div class='result_box well'> <p class='result_title'>"
+                                                                            +drink['pk']+ ": </p><p>" + unescape(encodeURIComponent(
+                                                                            drink['fields']['directions'])) + " </p></div>");
+                                                });
+                                            }
+                                        },
+                                error:function (xhr, textStatus, thrownError) 
+                                    {
+                                        console.log("xhr: " + xhr + " textStatus: " + textStatus + " thrownError: " + thrownError);
+                                    }
+                                });
+                        }
                     });
                     $("#ingredient_entry").click(function(e) {
                         e.preventDefault();
@@ -170,7 +172,7 @@
                     <p class="result_title">
                         No Results
                     </p>
-            i   </div>
+                </div>
             </div>
             {% if results %} 
                 <h3> Results: </h3>
