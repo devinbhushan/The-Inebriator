@@ -58,7 +58,22 @@ def search(request, page=1):
             for drink in drinks_tuple:
                 drinks_list.append(drink[0])
                 print "%s" % drink[0].name.encode('utf-8')
-        return HttpResponse(serializers.serialize("json",drinks_list), mimetype='application/json')#render_to_response('search.html', {'form': form,
+        json_drinks = []
+        for drink in drinks_list:
+            curr_drink = {}
+            curr_drink["name"] = drink.name
+            curr_drink["directions"] = drink.directions
+            curr_drink["ingredients"] = []
+
+            for ingredient in drink.ingredients.all():
+                curr_ingredient = {}
+                curr_ingredient["name"] = ingredient.name
+                curr_ingredient["unit"] = ingredient.unit
+                curr_ingredient["amount"] = ingredient.amount
+                curr_drink["ingredients"].append(curr_ingredient)
+
+            json_drinks.append(curr_drink)
+        return HttpResponse(json.dumps(json_drinks), mimetype='application/json')#render_to_response('search.html', {'form': form,
                                                     #'results':drinks[(page-1)*500:page*500],
                                                     #'page':page,
                                                     #'next':page+1,

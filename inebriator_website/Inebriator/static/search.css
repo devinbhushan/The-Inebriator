@@ -1,3 +1,11 @@
+.modal-backdrop #beer {
+    vertical-align:middle;
+    width:330px;
+    height:270px;
+    left:35%;
+    margin:0 0;
+    position:relative;
+}
 .required .alert {
     display:inline-block;
     margin-top:10px;
@@ -14,6 +22,11 @@
     margin-bottom:10px;
 }
 .result_title {
+    font-weight:bolder;
+    color:black;
+    padding-bottom:10px;
+}
+.secondary_title {
     font-weight:bold;
     color:blue;
 }
