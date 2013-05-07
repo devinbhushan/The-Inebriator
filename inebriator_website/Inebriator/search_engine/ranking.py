@@ -4,6 +4,7 @@ import ast
 from math import log
 from Queue import PriorityQueue
 import operator
+from django.core.exceptions import ObjectDoesNotExist
 
 PWD = os.path.dirname(os.path.realpath(__file__))
 filepath = os.path.abspath(os.path.join(PWD, "..", ".."))
@@ -13,6 +14,15 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'Inebriator.settings'
 from models import *
 
 def rank(query_terms, drinks):
+
+    #Split all the query terms by white space
+    split_list = []
+    for term in query_terms:
+        split = term.split()
+        split_list = split_list + split
+
+    query_terms = split_list
+
     avg_len = 0
     counter = 0
     sorted_drinks = {}
@@ -31,10 +41,12 @@ def rank(query_terms, drinks):
 
         #Sum up all the terms to get the score
         for term in query_terms:
-            term_object = Frequency.objects.get(name=term.lower())
             term_freq = 0.0
-            if term_object is not None:
+            try:
+                term_object = Frequency.objects.get(name=term.lower())
                 term_freq = float(term_object.quantity)
+            except ObjectDoesNotExist:
+                term_freq = 0.0
 	        #idf below
             idf = log((len(drinks)-term_freq+.5)/(term_freq+.5),2)
             ingredients = drink.ingredients.all()
