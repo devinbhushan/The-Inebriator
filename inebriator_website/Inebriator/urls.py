@@ -20,6 +20,6 @@ urlpatterns = patterns('',
     (r'^home/', home),
     (r'^search/$', search),
     (r'^search/(?P<page>\d{1})/', "search"),
-    (r'^trending/', trending),
+    (r'^raspberry/', raspberry),
     (r'^popular/', popular),
 )

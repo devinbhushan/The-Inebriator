@@ -69,16 +69,35 @@ def search(request, page=1):
         return render_to_response('search.html', {'form': form},
                                   context_instance=RequestContext(request))
 
-def trending(request):
+def raspberry(request):
     """
     Trending section of the website
     """
     client_obj = Client()
     client_obj.connect('192.168.1.105', 9999)
     client_obj.send("8======D~~~~~~~O:")
-    msg_received = client_obj.listen()
-    print "message received!: %s" % msg_received
-    return render_to_response('trending.html', {'msg':msg_received})
+    pi_ingredients = client_obj.listen()
+    print "message received!: %s" % pi_ingredients
+
+    master_set = set(Drink.objects.all())
+    for ingredient in pi_ingredients:
+        results = Drink.objects.filter(
+                                Q(ingredients__name__contains=ingredient))
+        master_set = master_set & set(results)
+    drinks = list(master_set)
+
+    if len(drinks)== 0:
+            drinks_list = []
+    else:
+        drinks_tuple = rank(required+optional, drinks)
+        drinks_list = []
+        print "Starting views"
+        for drink in drinks_tuple:
+            drinks_list.append(drink[0])
+            print "%s" % drink[0].name.encode('utf-8')
+
+    return render_to_response('raspberry.html', {'msg':pi_ingredients})
+
 def popular(request):
     """
     Popular section of the website
