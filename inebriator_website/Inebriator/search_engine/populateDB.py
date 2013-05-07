@@ -14,7 +14,7 @@ import csv
 
 path = os.path.dirname(os.path.realpath(__file__))
 
-csvfile = open('%s/../../../drink_scraper/Drinks_Mixer.csv' % path, 'rb')
+csvfile = open('%s/../../../drink_scraper/GCtest.csv' % path, 'rb')
 data = csv.reader(csvfile)
 
 header = True
@@ -23,7 +23,7 @@ with transaction.commit_on_success():
         if header:
             header = False
             continue
-        drink_list = ['drink_rating', 'drink_num_review', 'drink_name', 'drink_tags', 'drink_directions', 'drink_ingredients']
+        drink_list = ['drink_rating', 'drink_num_review', 'drink_name', 'drink_tags', 'drink_url','drink_ingredients', 'drink_directions']
         num = 0
         for drink_item in drink_list:
             curr_value = 'row[num]'
@@ -36,7 +36,7 @@ with transaction.commit_on_success():
             drink_num_review = None
         if drink_directions is '' or drink_ingredients is '':
             continue
-        drink = Drink(name=drink_name, rating=drink_rating, num_ratings=drink_num_review, directions=json.dumps(drink_directions))
+        drink = Drink(name=drink_name, rating=drink_rating, num_ratings=drink_num_review, url=drink_url, directions=json.dumps(drink_directions))
 
         # Check for Duplicate drinks in database
         try:

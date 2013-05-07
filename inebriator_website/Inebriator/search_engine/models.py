@@ -8,6 +8,7 @@ class Drink(models.Model):
     directions = models.TextField()
     #tags = models.ManyToManyField("Tag")
     ingredients = models.ManyToManyField("Ingredient")
+    url = models.TextField()
 
     class Meta:
         app_label = "search_engine"

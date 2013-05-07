@@ -138,8 +138,8 @@
                                             }
                                             else {
                                                 $(response).each(function(index, drink) {
-                                                    $('.results').append("<div class='result_box well'> <h3 class='result_title'>"
-                                                                            + drink['name']+ ": </h3><p class='secondary_title'>" +
+                                                    $('.results').append("<div class='result_box well'> <a class='result_title' href='"+drink['url']+"'>"
+                                                                            + drink['name']+ ": </a><p class='secondary_title'>" +
                                                                             "Directions</p><p>" + drink['directions'] + " </p>"
                                                                             + "<p class='secondary_title'>Ingredients </p>"
                                                                         );

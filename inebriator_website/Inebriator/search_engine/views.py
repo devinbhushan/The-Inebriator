@@ -81,6 +81,7 @@ def search(request, page=1):
             curr_drink = {}
             curr_drink["name"] = drink.name
             curr_drink["directions"] = drink.directions
+            curr_drink["url"] = drink.url
             curr_drink["ingredients"] = []
 
             for ingredient in drink.ingredients.all():
