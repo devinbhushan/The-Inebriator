@@ -16,6 +16,8 @@ from dictionary import Dictionary
 #from django.conf import settings
 #import sys
 
+RASPBERRY_IP='192.168.1.107'
+
 def home(request):
     """
     Home page of the website
@@ -105,33 +107,69 @@ def raspberry(request):
     """
     Trending section of the website
     """
-    client_obj = Client()
-    client_obj.connect('192.168.1.105', 9999)
-    client_obj.send("8======D~~~~~~~O:")
-    pi_ingredients = json.loads(client_obj.listen())
-    print "message received!: %s" % pi_ingredients
-
-    master_set = set(Drink.objects.all())
-    for ingredient in pi_ingredients:
-        results = Drink.objects.filter(
-                                Q(ingredients__name__contains=ingredient))
-        master_set = master_set & set(results)
-    drinks = list(master_set)
-
-    if len(drinks)== 0:
+    #Connect to the Raspberry Pi
+    try:
+        client_obj = Client()
+        client_obj.connect(RASPBERRY_IP, 9999)
+        client_obj.send("Ingredient Request:")
+        pi_ingredients = json.loads(client_obj.listen())
+        print "message received!: %s" % pi_ingredients
+        master_set = set(Drink.objects.all())
+        all_drinks = Drink.objects.all()
+        drinks = []
+        for drink in all_drinks:
+            add_flag = True
+            if drink.name == "Whiskey Sour" or drink.name == "Midori Sour":
+                print drink.name
+            #Search the drink's ingredients
+            for ingredient in drink.ingredients.all():
+                if ingredient.name not in pi_ingredients:
+                    add_flag = False
+                    #Debug
+                    #if drink.name == "Whiskey Sour" or drink.name == "Midori Sour":
+                        #print "Not adding %s because %s" % (drink.name, ingredient.name)
+                else:
+                    continue
+                    #print "Drink: %s, Ingredient: %s" % (drink.name, ingredient.name)
+            if add_flag is True:
+                print "Adding drink: %s " % drink.name
+                drinks.append(drink)
+        if len(drinks)== 0:
             drinks_list = []
-    else:
-        drinks_tuple = rank(pi_ingredients, drinks)
-        drinks_list = []
-        print "Starting views"
-        for drink in drinks_tuple:
-            drinks_list.append(drink[0])
-            print "%s" % drink[0].name.encode('utf-8')
+        else:
+            drinks_tuple = rank(pi_ingredients, drinks)
+            drinks_list = []
+            print "Starting views"
+            for drink in drinks_tuple:
+                drinks_list.append(drink[0])
+                print "%s" % drink[0].name.encode('utf-8')
 
-    return render_to_response('raspberry.html', {'msg':drinks_list})
+    except:
+        print "Error:", sys.exc_info()[0]
+        drinks_list = "Raspberry Pi not Connected"
+
+    return render_to_response('raspberry.html', {'results':drinks_list})
 
 def popular(request):
     """
     Popular section of the website
     """
     return render_to_response('popular.html')
+
+def make_drink(request, drink):
+    drink_name = drink.replace("%20", " ");
+    print "Making: %s" % drink
+    drink = Drink.objects.get(name=drink_name)
+    print "Retreived drink: %s" % drink.name
+
+    try:
+        client_obj = Client()
+        client_obj.connect(RASPBERRY_IP, 9999)
+        drink_message = "Make me: %s" % drink.name
+        client_obj.send(drink_message)
+        message = "Success! Your drink was sent!"
+    except:
+        message = "Failed. Not connected to the raspberry Pi"
+
+    return render_to_response('make_drink.html', {'message':message})
+
