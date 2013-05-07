@@ -138,9 +138,18 @@
                                             }
                                             else {
                                                 $(response).each(function(index, drink) {
-                                                    $('.results').append("<div class='result_box well'> <p class='result_title'>"
-                                                                            +drink['pk']+ ": </p><p>" + unescape(encodeURIComponent(
-                                                                            drink['fields']['directions'])) + " </p></div>");
+                                                    console.log("drink:"+ drink['name']);
+                                                    $('.results').append("<div class='result_box well'> <h3 class='result_title'>"
+                                                                            + drink['name']+ ": </h3><p class='secondary_title'>" +
+                                                                            "Directions</p><p>" + drink['directions'] + " </p>"
+                                                                            + "<p class='secondary_title'>Ingredients </p>"
+                                                                        );
+                                                    console.log("beginning ingredient loop");
+                                                    drink['ingredients'].forEach(function(ingred, index) {
+                                                        $('.result_box').last().append("<p>" + 
+                                                                            ingred["name"] + "</p>");
+                                                    });
+                                                    console.log("adding end of div");
                                                 });
                                             }
                                         },
@@ -154,24 +163,26 @@
                     });
                     $("#ingredient_entry").click(function(e) {
                         e.preventDefault();
-                        if ($('#id_search').val() != "")
-                        {
-                            //$('#id_search').val($('#id_search').val()+","+$('#search').val());
-                            if ($('#req_radio').hasClass('active'))
-                                $('.required').append("<div class='alert alert-info'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
+                        if ($('#search').val().length > 0) {
+                            if ($('#id_search').val() != "")
+                            {
+                                //$('#id_search').val($('#id_search').val()+","+$('#search').val());
+                                if ($('#req_radio').hasClass('active'))
+                                    $('.required').append("<div class='alert alert-info'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
+                                else
+                                    $('.optional').append("<div class='alert alert-success'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
+                            }
                             else
-                                $('.optional').append("<div class='alert alert-success'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
+                            {
+                                //$('#id_search').val($("#search").val())
+                                if ($('#req_radio').hasClass('active'))
+                                    $('.required').append("<div class='alert alert-info'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
+                                else
+                                    $('.optional').append("<div class='alert alert-success'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
+                            }
+                            $('#search').val('');
+                            console.log("req input val:" + $('#id_search').val());
                         }
-                        else
-                        {
-                            //$('#id_search').val($("#search").val())
-                            if ($('#req_radio').hasClass('active'))
-                                $('.required').append("<div class='alert alert-info'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
-                            else
-                                $('.optional').append("<div class='alert alert-success'> <button type='button' class='close' data-dismiss='alert'>×</button>"+$('#search').val()+"</div>");
-                        }
-                        $('#search').val('');
-                        console.log("req input val:" + $('#id_search').val());
                     });
                 });
             </script>
