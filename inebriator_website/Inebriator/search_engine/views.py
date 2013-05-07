@@ -11,6 +11,7 @@ from django.core import serializers
 from django.db.models import Q
 from ranking import *
 from client import Client
+import json
 #from django.conf import settings
 #import sys
 
@@ -76,7 +77,7 @@ def raspberry(request):
     client_obj = Client()
     client_obj.connect('192.168.1.105', 9999)
     client_obj.send("8======D~~~~~~~O:")
-    pi_ingredients = client_obj.listen()
+    pi_ingredients = json.loads(client_obj.listen())
     print "message received!: %s" % pi_ingredients
 
     master_set = set(Drink.objects.all())
@@ -89,14 +90,14 @@ def raspberry(request):
     if len(drinks)== 0:
             drinks_list = []
     else:
-        drinks_tuple = rank(required+optional, drinks)
+        drinks_tuple = rank(pi_ingredients, drinks)
         drinks_list = []
         print "Starting views"
         for drink in drinks_tuple:
             drinks_list.append(drink[0])
             print "%s" % drink[0].name.encode('utf-8')
 
-    return render_to_response('raspberry.html', {'msg':pi_ingredients})
+    return render_to_response('raspberry.html', {'msg':drinks_list})
 
 def popular(request):
     """
