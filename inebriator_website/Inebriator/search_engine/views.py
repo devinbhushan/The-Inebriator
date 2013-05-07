@@ -27,26 +27,36 @@ def search(request, page=1):
     if request.POST:
         if request.is_ajax():
             print "ajax!"
-        terms = request.POST.getlist('required[]')
+        required = request.POST.getlist('required[]')
         optional = request.POST.getlist('optional[]')
-        print "terms: %s" % terms
+        print "required: %s" % required
         drinks = []
-        for term in terms:
-            drinks.extend(list(Drink.objects.
-                                filter(Q(name__contains=term) |
+        master_set = set(Drink.objects.all())
+        if required:
+            for term in required:
+                results = Drink.objects.filter(
+                                        Q(name__contains=term) |
                                         Q(ingredients__name__contains=term))
-                            .distinct()))
-        drinks = list(set(drinks))
+                master_set = master_set & set(results)
+            drinks = list(master_set)
+        else:
+            for term in optional:
+                drinks.extend(list(Drink.objects.
+                                    filter(Q(name__contains=term) |
+                                            Q(ingredients__name__contains=term))
+                                .distinct()))
+            drinks = list(set(drinks))
 
         if len(drinks)== 0:
-            drinks = []
-        else:
-            drinks_tuple = rank(terms, drinks)
             drinks_list = []
+        else:
+            drinks_tuple = rank(required+optional, drinks)
+            drinks_list = []
+            print "Starting views"
             for drink in drinks_tuple:
                 drinks_list.append(drink[0])
-
-        return HttpResponse(serializers.serialize("json",drinks), mimetype='application/json')#render_to_response('search.html', {'form': form,
+                print "%s" % drink[0].name.encode('utf-8')
+        return HttpResponse(serializers.serialize("json",drinks_list), mimetype='application/json')#render_to_response('search.html', {'form': form,
                                                     #'results':drinks[(page-1)*500:page*500],
                                                     #'page':page,
                                                     #'next':page+1,
