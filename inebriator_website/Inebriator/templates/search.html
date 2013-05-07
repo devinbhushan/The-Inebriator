@@ -138,18 +138,15 @@
                                             }
                                             else {
                                                 $(response).each(function(index, drink) {
-                                                    console.log("drink:"+ drink['name']);
                                                     $('.results').append("<div class='result_box well'> <h3 class='result_title'>"
                                                                             + drink['name']+ ": </h3><p class='secondary_title'>" +
                                                                             "Directions</p><p>" + drink['directions'] + " </p>"
                                                                             + "<p class='secondary_title'>Ingredients </p>"
                                                                         );
-                                                    console.log("beginning ingredient loop");
                                                     drink['ingredients'].forEach(function(ingred, index) {
                                                         $('.result_box').last().append("<p>" + 
                                                                             ingred["name"] + "</p>");
                                                     });
-                                                    console.log("adding end of div");
                                                 });
                                             }
                                         },

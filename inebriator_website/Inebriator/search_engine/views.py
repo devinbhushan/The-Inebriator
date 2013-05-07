@@ -12,6 +12,7 @@ from django.db.models import Q
 from ranking import *
 from client import Client
 import json
+from dictionary import Dictionary
 #from django.conf import settings
 #import sys
 
@@ -29,8 +30,23 @@ def search(request, page=1):
     if request.POST:
         if request.is_ajax():
             print "ajax!"
+        spell_check = Dictionary()
+        spell_check.init_dict()
+
         required = request.POST.getlist('required[]')
+        corrected_required = []
+        for term in required:
+            correct_term = spell_check.correct(term)
+            corrected_required.append(correct_term)
+        required = corrected_required
+
         optional = request.POST.getlist('optional[]')
+        corrected_optional = []
+        for term in optional:
+            correct_term = spell_check.correct(term)
+            corrected_optional.append(correct_term)
+        optional = corrected_optional
+
         print "required: %s" % required
         drinks = []
         master_set = set(Drink.objects.all())
